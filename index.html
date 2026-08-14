@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rotary Club Feira de Santana — Assiduidade 2026</title>
+<style>
+  :root{
+    color-scheme: light;
+    --surface-page:   #f9f9f7;
+    --surface-card:   #fcfcfb;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --seq-100:        #cde2fb;
+    --seq-400:        #3987e5;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --critical:       #d03b3b;
+    --good-bg:        #e8f7e8;
+    --warning-bg:     #fff6e2;
+    --critical-bg:    #fbe9e9;
+    --muted-bg:       #eeede9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface-page:   #0d0d0d;
+      --surface-card:   #1a1a19;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-blue:    #3987e5;
+      --seq-100:        #184f95;
+      --seq-400:        #3987e5;
+      --good:           #0ca30c;
+      --warning:        #fab219;
+      --critical:       #e66767;
+      --good-bg:        rgba(12,163,12,0.16);
+      --warning-bg:     rgba(250,178,25,0.16);
+      --critical-bg:    rgba(230,103,103,0.16);
+      --muted-bg:       rgba(255,255,255,0.06);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-page:   #0d0d0d;
+    --surface-card:   #1a1a19;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.10);
+    --series-blue:    #3987e5;
+    --seq-100:        #184f95;
+    --seq-400:        #3987e5;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --critical:       #e66767;
+    --good-bg:        rgba(12,163,12,0.16);
+    --warning-bg:     rgba(250,178,25,0.16);
+    --critical-bg:    rgba(230,103,103,0.16);
+    --muted-bg:       rgba(255,255,255,0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 40px;
+  }
+  a { color: inherit; }
+
+  .wrap{ max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+  header.top{
+    padding: 20px 16px 14px;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+  }
+  .brand{ display:flex; gap:10px; align-items:center; }
+  .brand-badge{
+    width:40px; height:40px; border-radius:10px;
+    background: var(--series-blue);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:15px; flex:none;
+  }
+  .brand h1{ font-size:16px; margin:0; line-height:1.25; }
+  .brand p{ margin:2px 0 0; font-size:12px; color: var(--text-secondary); }
+  .theme-toggle{
+    border: 1px solid var(--border); background: var(--surface-card);
+    color: var(--text-secondary); border-radius:20px; padding:6px 12px;
+    font-size:12px; cursor:pointer;
+  }
+
+  .stats{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;
+    margin: 6px 16px 18px;
+  }
+  .stat-tile{
+    background: var(--surface-card); border:1px solid var(--border);
+    border-radius:14px; padding:12px 10px; text-align:center;
+  }
+  .stat-tile .value{ font-size:22px; font-weight:700; font-variant-numeric: tabular-nums; }
+  .stat-tile .label{ font-size:10.5px; color: var(--text-secondary); margin-top:2px; line-height:1.25; }
+
+  .section-title{
+    font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    color: var(--text-secondary); margin: 22px 16px 8px;
+  }
+  .section-title-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin: 22px 16px 8px; flex-wrap:wrap;
+  }
+  .expand-controls{ display:flex; gap:6px; }
+  .expand-controls button{
+    border:1px solid var(--border); background: var(--surface-card);
+    color: var(--text-secondary); border-radius:20px; padding:5px 11px;
+    font-size:11px; font-family:inherit; cursor:pointer;
+  }
+  .expand-controls button:hover{ color: var(--text-primary); }
+
+  .search-bar{ margin: 0 16px 12px; position:relative; }
+  .search-bar input{
+    width:100%; padding:11px 14px 11px 36px; border-radius:12px;
+    border:1px solid var(--border); background: var(--surface-card);
+    color: var(--text-primary); font-size:14px; font-family:inherit;
+  }
+  .search-bar input:focus{ outline:2px solid var(--series-blue); outline-offset:1px; }
+  .search-bar svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.5; }
+
+  .legend-row{
+    display:flex; gap:14px; margin: 0 16px 14px; flex-wrap:wrap;
+    font-size:11.5px; color: var(--text-secondary);
+  }
+  .legend-row span{ display:inline-flex; align-items:center; gap:5px; }
+  .dot{ width:9px; height:9px; border-radius:50%; flex:none; }
+
+  .ranking{ margin: 0 16px; display:flex; flex-direction:column; gap:8px; }
+
+  .card{
+    background: var(--surface-card); border:1px solid var(--border);
+    border-radius:16px; padding:12px 14px; cursor:pointer;
+    transition: background .15s ease;
+  }
+  .card[open] { background: var(--surface-card); }
+  .card summary{ list-style:none; }
+  .card summary::-webkit-details-marker{ display:none; }
+
+  .row-top{ display:flex; align-items:center; gap:10px; }
+  .pos{
+    width:26px; height:26px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11.5px; font-weight:700; font-variant-numeric: tabular-nums;
+    background: var(--muted-bg); color: var(--text-secondary);
+  }
+  .pos.top1{ background:#fab21933; color:#a86a00; }
+  .pos.top2{ background:#c3c2b755; color: var(--text-secondary); }
+  .pos.top3{ background:#eb683433; color:#a3441c; }
+  :root[data-theme="dark"] .pos.top1, .pos.top1 { }
+
+  .name-block{ flex:1; min-width:0; }
+  .name{ font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .name .flag{
+    font-size:9.5px; font-weight:700; color: var(--text-muted);
+    border:1px solid var(--gridline); border-radius:5px; padding:1px 4px; margin-left:6px;
+    vertical-align: 1px;
+  }
+  .meta{ font-size:11px; color: var(--text-secondary); margin-top:1px; font-variant-numeric: tabular-nums; }
+
+  .pts-block{ text-align:right; flex:none; }
+  .pts{ font-size:18px; font-weight:800; font-variant-numeric: tabular-nums; }
+  .pts small{ font-size:10px; font-weight:600; color: var(--text-secondary); }
+
+  .bar-track{
+    height:6px; border-radius:4px; background: var(--gridline); margin-top:9px; overflow:hidden;
+  }
+  .bar-fill{ height:100%; border-radius:4px; background: var(--series-blue); }
+
+  .detail{
+    margin-top:12px; padding-top:12px; border-top:1px dashed var(--gridline);
+  }
+  .detail-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; }
+  .meet{
+    border-radius:10px; padding:7px 4px; text-align:center; background: var(--muted-bg);
+    display:block; text-decoration:none; cursor:pointer;
+    transition: filter .12s ease, transform .12s ease;
+  }
+  .meet:hover, .meet:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
+  :root[data-theme="dark"] .meet:hover, .meet:hover { }
+  .meet .d{ font-size:9.5px; color: var(--text-secondary); }
+  .meet .pdf-ico{ font-size:9px; opacity:.75; }
+  .meet .s{ font-size:11px; font-weight:700; margin-top:3px; }
+  .meet.p{ background: var(--good-bg); }
+  .meet.p .s{ color: var(--good); }
+  .meet.aj{ background: var(--warning-bg); }
+  .meet.aj .s{ color:#a86a00; }
+  :root[data-theme="dark"] .meet.aj .s{ color: var(--warning); }
+  .meet.a{ background: var(--critical-bg); }
+  .meet.a .s{ color: var(--critical); }
+  .meet.dash .s{ color: var(--text-muted); }
+
+  .obs{
+    margin-top:10px; font-size:11.5px; color:#a3441c; background:#eb683418;
+    border-radius:8px; padding:7px 9px; line-height:1.4;
+  }
+  :root[data-theme="dark"] .obs{ color:#f0a888; background:#eb683422; }
+
+  .chevron{ transition: transform .15s ease; color: var(--text-muted); flex:none; }
+  .card[open] .chevron{ transform: rotate(180deg); }
+
+  .empty{ text-align:center; color: var(--text-secondary); font-size:13px; padding: 30px 0; }
+
+  footer{ margin: 28px 16px 0; font-size:11px; color: var(--text-muted); line-height:1.6; }
+  footer .legend-def{ margin-top:6px; }
+
+  @media (min-width:480px){
+    .stats{ grid-template-columns: repeat(3,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-badge">RC</div>
+      <div>
+        <h1>Rotary Club Feira de Santana</h1>
+        <p>Controle de assiduidade &middot; 2026</p>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle">🌙 Tema</button>
+  </header>
+
+  <div class="stats">
+    <div class="stat-tile">
+      <div class="value" id="statReunioes">–</div>
+      <div class="label">reuniões realizadas</div>
+    </div>
+    <div class="stat-tile">
+      <div class="value" id="statMedia">–</div>
+      <div class="label">presença média do clube</div>
+    </div>
+    <div class="stat-tile">
+      <div class="value" id="statLideres">–</div>
+      <div class="label" id="statLideresLabel">na liderança</div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="Buscar sócio pelo nome…">
+  </div>
+
+  <div class="legend-row">
+    <span><span class="dot" style="background:var(--good)"></span>Presente</span>
+    <span><span class="dot" style="background:var(--warning)"></span>Falta justificada</span>
+    <span><span class="dot" style="background:var(--critical)"></span>Falta</span>
+  </div>
+
+  <div class="section-title-row">
+    <div class="section-title" style="margin:0;">Ranking &middot; julho/2026</div>
+    <div class="expand-controls">
+      <button id="expandAllBtn" type="button">Expandir tudo</button>
+      <button id="collapseAllBtn" type="button">Recolher tudo</button>
+    </div>
+  </div>
+  <div class="ranking" id="ranking"></div>
+  <div class="empty" id="emptyState" style="display:none;">Nenhum sócio encontrado.</div>
+
+  <footer>
+    <div>1 ponto por presença ou falta justificada &middot; falta sem justificativa não pontua &middot; ranking = soma de pontos no período.</div>
+    <div class="legend-def">(*) sócio dispensado de frequência (idade + tempo de Rotary ≥ 85 anos), pontua pela mesma regra.</div>
+    <div class="legend-def">Atualizado em 28/07/2026 &middot; próxima atualização após a reunião seguinte.</div>
+    <div class="legend-def">📄 Toque numa data (dentro do card expandido de cada sócio) para abrir a lista de frequência assinada daquele dia.</div>
+  </footer>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// DADOS — atualizar este array a cada nova lista de frequência lida.
+// status: array de 4 (ou mais, conforme o ano avança) códigos:
+//   "P"  presente | "AJ" ausente justificado (conta ponto) | "A" ausente | "-" não constava na lista
+// ---------------------------------------------------------------
+const MEETINGS = [
+  { label: "07/07", pdf: "atas/2026-07-07.pdf" },
+  { label: "14/07", pdf: "atas/2026-07-14.pdf" },
+  { label: "21/07", pdf: "atas/2026-07-21.pdf" },
+  { label: "28/07", pdf: "atas/2026-07-28.pdf" },
+];
+
+const MEMBERS = [
+  {nome:"Adauto Alves Franco Junior", disp:false, status:["A","P","P","P"]},
+  {nome:"André Campana Correia Leite", disp:false, status:["A","P","P","P"]},
+  {nome:"Albertony Santos Assis", disp:false, status:["P","P","A","P"]},
+  {nome:"Alpiniano Reis Oliveira Filho", disp:false, status:["A","P","P","P"]},
+  {nome:"André Fernandes Dórea", disp:true, status:["A","P","P","P"]},
+  {nome:"Antônio Washington F. de Almeida", disp:true, status:["P","P","P","P"]},
+  {nome:"Antônio José de Carvalho Monteiro", disp:false, status:["P","P","A","P"]},
+  {nome:"Alexandre Tarquínio Lara Medrado", disp:false, status:["P","A","A","P"]},
+  {nome:"Bruno Nunes Silva", disp:false, status:["P","P","P","P"]},
+  {nome:"Carlos Olimpio Ferraz Ribeiro Junior", disp:false, status:["A","A","A","A"]},
+  {nome:"Claudiana de Souza Santos Carvalho", disp:false, status:["A","P","A","A"]},
+  {nome:"Cleber Chagas Gonçalves", disp:false, status:["A","P","A","A"]},
+  {nome:"Cristiano Almeida de Oliveira", disp:false, status:["P","P","A","A"]},
+  {nome:"Cristina Fernandes da Cruz Dórea", disp:false, status:["P","A","P","P"], obs:"Assinatura fraca em 21/07 — conferir com a lista física."},
+  {nome:"Dázio Brasileiro Filho", disp:true, status:["P","P","P","P"]},
+  {nome:"Deonilso Aparecido Bueno de Oliveira", disp:true, status:["A","A","A","P"]},
+  {nome:"Dion Luciano Vital", disp:false, status:["P","A","P","P"]},
+  {nome:"Edivaldo Rodrigues Santana", disp:false, status:["P","P","P","P"]},
+  {nome:"Eliana Mattos de Amorim Bueno", disp:false, status:["P","A","A","P"]},
+  {nome:"Fernanda Bulcão Palmeira", disp:false, status:["A","A","A","A"]},
+  {nome:"Fernando Gassmann Figueiredo", disp:false, status:["A","P","P","A"]},
+  {nome:"Hugo da Cruz Dórea", disp:true, status:["P","P","P","P"], obs:"Assinatura fraca em algumas datas — conferir com a lista física."},
+  {nome:"Ítalo Almeida de Moura", disp:false, status:["P","P","P","P"]},
+  {nome:"Jeidson Antônio Morais Marques", disp:false, status:["A","P","P","P"]},
+  {nome:"João Baptista Ferreira", disp:true, status:["A","A","A","A"]},
+  {nome:"João Barreto", disp:true, status:["A","P","P","P"], obs:"Marca de assinatura pequena — conferir com a lista física."},
+  {nome:"Jolival Alves Soares", disp:false, status:["A","P","A","P"]},
+  {nome:"José Adson Santos Rubem", disp:false, status:["A","A","A","A"]},
+  {nome:"José Carlos Oliveira Bispo", disp:false, status:["A","P","A","A"]},
+  {nome:"José Carlos Rodrigues", disp:false, status:["P","P","P","P"]},
+  {nome:"José de Anchieta Leite", disp:true, status:["P","P","P","P"]},
+  {nome:"José Geraldo Lopes Siqueira", disp:false, status:["P","P","P","P"]},
+  {nome:"José Raimundo Pereira de Azevedo", disp:true, status:["P","P","P","P"]},
+  {nome:"José Rosa Figueiredo Filho", disp:true, status:["A","P","A","A"]},
+  {nome:"Luiz da Costa Neto", disp:true, status:["A","A","A","P"]},
+  {nome:"Márcio Lara Medrado", disp:false, status:["P","P","A","P"]},
+  {nome:"Maria Clécia Vasconcelos", disp:false, status:["A","P","A","P"]},
+  {nome:"Miguel Fernandes Dórea", disp:true, status:["A","A","A","P"]},
+  {nome:"Moisés de Santana Silva", disp:false, status:["P","P","A","P"]},
+  {nome:"Nilson Coelho Lopes", disp:true, status:["A","P","A","P"]},
+  {nome:"Paulo Barreto dos Santos", disp:true, status:["P","P","P","AJ"]},
+  {nome:"Reginaldo Caribé de Araújo", disp:true, status:["A","-","-","-"], obs:"Só aparece na lista de 07/07 — mantido no ranking, status em confirmação junto ao clube."},
+  {nome:"Renato Ribeiro da Silva", disp:false, status:["P","P","P","P"]},
+  {nome:"Ricardo Gassmann Figueiredo", disp:false, status:["A","A","A","A"]},
+  {nome:"Ricardo de Souza Santos", disp:false, status:["A","-","-","-"], obs:"Só aparece na lista de 07/07 — mantido no ranking, status em confirmação junto ao clube."},
+  {nome:"Ronald de Freitas Paixão", disp:false, status:["A","A","A","A"]},
+  {nome:"Roseli Rodrigues da Silva", disp:false, status:["P","P","P","P"]},
+  {nome:"Ruy Sandes Leal", disp:true, status:["A","P","P","P"]},
+  {nome:"Ruy Sandes Leal Junior", disp:false, status:["P","AJ","AJ","A"]},
+  {nome:"Waldécio dos Santos Vita", disp:false, status:["P","A","A","A"]},
+  {nome:"Vinícius Guedes Rios", disp:false, status:["A","P","A","P"]},
+  {nome:"Yolanda Nati Gassmann Figueiredo", disp:false, status:["A","P","A","A"]},
+];
+
+function computeRow(m){
+  const validas = m.status.filter(s => s !== "-").length;
+  const pontos = m.status.filter(s => s === "P" || s === "AJ").length;
+  const faltas = m.status.filter(s => s === "A").length;
+  const pct = validas === 0 ? 0 : Math.round((pontos / validas) * 100);
+  return {...m, pontos, faltas, validas, pct};
+}
+
+const DATA = MEMBERS.map(computeRow).sort((a,b) => {
+  if (b.pontos !== a.pontos) return b.pontos - a.pontos;
+  if (b.pct !== a.pct) return b.pct - a.pct;
+  if (a.faltas !== b.faltas) return a.faltas - b.faltas;
+  return a.nome.localeCompare(b.nome, "pt-BR");
+});
+
+// stats
+const reunioesValidas = MEETINGS.length;
+const somaPct = DATA.reduce((s,d) => s + d.pct, 0);
+document.getElementById("statReunioes").textContent = reunioesValidas;
+document.getElementById("statMedia").textContent = Math.round(somaPct / DATA.length) + "%";
+
+const maxPontos = DATA[0].pontos;
+const lideres = DATA.filter(d => d.pontos === maxPontos);
+document.getElementById("statLideres").textContent = lideres.length;
+document.getElementById("statLideresLabel").textContent = lideres.length === 1
+  ? `na liderança (${maxPontos} pts)`
+  : `empatados na liderança (${maxPontos} pts)`;
+
+const STATUS_LABEL = {P:"Presente", AJ:"Justificada", A:"Falta", "-":"—"};
+const STATUS_CLASS = {P:"p", AJ:"aj", A:"a", "-":"dash"};
+
+function renderCard(d, idx){
+  const posClass = idx === 0 ? "top1" : idx === 1 ? "top2" : idx === 2 ? "top3" : "";
+  const meets = d.status.map((s,i) => `
+    <a class="meet ${STATUS_CLASS[s]}" href="${MEETINGS[i].pdf}" target="_blank" rel="noopener" title="Abrir ata de ${MEETINGS[i].label}">
+      <div class="d">${MEETINGS[i].label} <span class="pdf-ico">📄</span></div>
+      <div class="s">${STATUS_LABEL[s]}</div>
+    </a>`).join("");
+
+  return `
+  <details class="card" data-name="${d.nome.toLowerCase()}">
+    <summary>
+      <div class="row-top">
+        <div class="pos ${posClass}">${idx+1}</div>
+        <div class="name-block">
+          <div class="name">${d.nome}${d.disp ? '<span class="flag">DISP.</span>' : ''}</div>
+          <div class="meta">${d.pontos} pts &middot; ${d.pct}% presença &middot; ${d.faltas} falta${d.faltas===1?'':'s'}</div>
+        </div>
+        <div class="pts-block">
+          <div class="pts">${d.pontos}<small> pt${d.pontos===1?'':'s'}</small></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%"></div></div>
+    </summary>
+    <div class="detail">
+      <div class="detail-grid">${meets}</div>
+      ${d.obs ? `<div class="obs">⚠️ ${d.obs}</div>` : ""}
+    </div>
+  </details>`;
+}
+
+function normalize(str){
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+const rankingEl = document.getElementById("ranking");
+function render(filter=""){
+  const f = normalize(filter.trim());
+  const filtered = DATA.filter(d => normalize(d.nome).includes(f));
+  rankingEl.innerHTML = filtered.map((d) => renderCard(d, DATA.indexOf(d))).join("");
+  document.getElementById("emptyState").style.display = filtered.length ? "none" : "block";
+}
+render();
+
+document.getElementById("searchInput").addEventListener("input", (e) => render(e.target.value));
+
+document.getElementById("expandAllBtn").addEventListener("click", () => {
+  rankingEl.querySelectorAll("details.card").forEach(d => d.open = true);
+});
+document.getElementById("collapseAllBtn").addEventListener("click", () => {
+  rankingEl.querySelectorAll("details.card").forEach(d => d.open = false);
+});
+
+// theme toggle
+const root = document.documentElement;
+const toggleBtn = document.getElementById("themeToggle");
+function applyStoredTheme(){
+  const saved = window.__theme || null;
+  if (saved) root.setAttribute("data-theme", saved);
+}
+toggleBtn.addEventListener("click", () => {
+  const current = root.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  window.__theme = next;
+  toggleBtn.textContent = next === "dark" ? "☀️ Tema" : "🌙 Tema";
+});
+</script>
+</body>
+</html>
