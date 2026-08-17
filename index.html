@@ -194,15 +194,10 @@
   }
   .detail-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; }
   .meet{
-    border-radius:10px; padding:7px 4px; text-align:center; background: var(--muted-bg);
-    display:block; text-decoration:none; cursor:pointer;
-    transition: filter .12s ease, transform .12s ease;
+    border-radius:10px; padding:7px 4px 6px; text-align:center; background: var(--muted-bg);
   }
-  .meet:hover, .meet:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
-  :root[data-theme="dark"] .meet:hover, .meet:hover { }
   .meet .d{ font-size:9.5px; color: var(--text-secondary); }
-  .meet .pdf-ico{ font-size:9px; opacity:.75; }
-  .meet .s{ font-size:11px; font-weight:700; margin-top:3px; }
+  .meet .s{ font-size:11px; font-weight:700; margin-top:2px; }
   .meet.p{ background: var(--good-bg); }
   .meet.p .s{ color: var(--good); }
   .meet.aj{ background: var(--warning-bg); }
@@ -211,6 +206,15 @@
   .meet.a{ background: var(--critical-bg); }
   .meet.a .s{ color: var(--critical); }
   .meet.dash .s{ color: var(--text-muted); }
+  .meet .docs{ display:flex; justify-content:center; gap:5px; margin-top:5px; }
+  .meet .docs a{
+    display:flex; align-items:center; justify-content:center;
+    width:21px; height:21px; border-radius:6px; flex:none;
+    background: var(--surface-card); border:1px solid var(--border);
+    font-size:10.5px; text-decoration:none; line-height:1;
+    transition: filter .12s ease, transform .12s ease;
+  }
+  .meet .docs a:hover, .meet .docs a:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
 
   .obs{
     margin-top:10px; font-size:11.5px; color:#a3441c; background:#eb683418;
@@ -275,7 +279,7 @@
   </div>
 
   <div class="section-title-row">
-    <div class="section-title" style="margin:0;">Ranking &middot; julho/2026</div>
+    <div class="section-title" style="margin:0;" id="rankingTitle">Ranking</div>
     <div class="expand-controls">
       <button id="expandAllBtn" type="button">Expandir tudo</button>
       <button id="collapseAllBtn" type="button">Recolher tudo</button>
@@ -288,7 +292,7 @@
     <div>1 ponto por presença ou falta justificada &middot; falta sem justificativa não pontua &middot; ranking = soma de pontos no período.</div>
     <div class="legend-def">(*) sócio dispensado de frequência (idade + tempo de Rotary ≥ 85 anos), pontua pela mesma regra.</div>
     <div class="legend-def">Atualizado em 28/07/2026 &middot; próxima atualização após a reunião seguinte.</div>
-    <div class="legend-def">📄 Toque numa data (dentro do card expandido de cada sócio) para abrir a lista de frequência assinada daquele dia.</div>
+    <div class="legend-def">Dentro do card expandido de cada sócio: 📋 abre a lista de presença assinada daquele dia &middot; 📝 abre a ata oficial da reunião.</div>
   </footer>
 
 </div>
@@ -299,11 +303,17 @@
 // status: array de 4 (ou mais, conforme o ano avança) códigos:
 //   "P"  presente | "AJ" ausente justificado (conta ponto) | "A" ausente | "-" não constava na lista
 // ---------------------------------------------------------------
+// Cada reunião tem 2 documentos: "lista" = lista de frequência assinada (sign-in),
+// "ata" = ata oficial da reunião (registro/minuta). Ficam em pastas separadas em
+// documentos/lista-presenca/ e documentos/ata-reuniao/, mesmo nome de arquivo (AAAA-MM-DD.pdf).
+// TODO (próximos meses): quando agosto entrar, este array cresce e o título vira
+// "Ranking · até <mês>/2026" automaticamente (já é dinâmico, ver ‘periodoLabel’ abaixo).
+// Quando tivermos 2+ meses, avaliar um seletor de mês/trimestre aqui.
 const MEETINGS = [
-  { label: "07/07", pdf: "atas/2026-07-07.pdf" },
-  { label: "14/07", pdf: "atas/2026-07-14.pdf" },
-  { label: "21/07", pdf: "atas/2026-07-21.pdf" },
-  { label: "28/07", pdf: "atas/2026-07-28.pdf" },
+  { label: "07/07", lista: "documentos/lista-presenca/2026-07-07.pdf", ata: "documentos/ata-reuniao/2026-07-07.pdf" },
+  { label: "14/07", lista: "documentos/lista-presenca/2026-07-14.pdf", ata: "documentos/ata-reuniao/2026-07-14.pdf" },
+  { label: "21/07", lista: "documentos/lista-presenca/2026-07-21.pdf", ata: "documentos/ata-reuniao/2026-07-21.pdf" },
+  { label: "28/07", lista: "documentos/lista-presenca/2026-07-28.pdf", ata: "documentos/ata-reuniao/2026-07-28.pdf" },
 ];
 
 const MEMBERS = [
@@ -325,7 +335,7 @@ const MEMBERS = [
   {nome:"Deonilso Aparecido Bueno de Oliveira", disp:true, status:["A","A","A","P"]},
   {nome:"Dion Luciano Vital", disp:false, status:["P","A","P","P"]},
   {nome:"Edivaldo Rodrigues Santana", disp:false, status:["P","P","P","P"]},
-  {nome:"Eliana Mattos de Amorim Bueno", disp:false, status:["P","A","A","P"]},
+  {nome:"Eliana Mattos de Amorim Bueno", disp:false, status:["P","AJ","AJ","P"]},
   {nome:"Fernanda Bulcão Palmeira", disp:false, status:["A","A","A","A"]},
   {nome:"Fernando Gassmann Figueiredo", disp:false, status:["A","P","P","A"]},
   {nome:"Hugo da Cruz Dórea", disp:true, status:["P","P","P","P"]},
@@ -374,6 +384,14 @@ const DATA = MEMBERS.map(computeRow).sort((a,b) => {
   return a.nome.localeCompare(b.nome, "pt-BR");
 });
 
+// título dinâmico "Ranking · até <mês>/2026" — baseado no mês da última reunião do array
+// MEETINGS. Assim, quando agosto (e os meses seguintes) forem adicionados, o título se
+// ajusta sozinho, sem precisar editar este texto manualmente todo mês.
+const MONTH_NAMES = ["", "janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const lastLabel = MEETINGS[MEETINGS.length - 1].label; // "DD/MM"
+const lastMonth = parseInt(lastLabel.split("/")[1], 10);
+document.getElementById("rankingTitle").textContent = `Ranking · até ${MONTH_NAMES[lastMonth]}/2026`;
+
 // stats
 const reunioesValidas = MEETINGS.length;
 const somaPct = DATA.reduce((s,d) => s + d.pct, 0);
@@ -393,10 +411,14 @@ const STATUS_CLASS = {P:"p", AJ:"aj", A:"a", "-":"dash"};
 function renderCard(d, idx){
   const posClass = idx === 0 ? "top1" : idx === 1 ? "top2" : idx === 2 ? "top3" : "";
   const meets = d.status.map((s,i) => `
-    <a class="meet ${STATUS_CLASS[s]}" href="${MEETINGS[i].pdf}" target="_blank" rel="noopener" title="Abrir ata de ${MEETINGS[i].label}">
-      <div class="d">${MEETINGS[i].label} <span class="pdf-ico">📄</span></div>
+    <div class="meet ${STATUS_CLASS[s]}">
+      <div class="d">${MEETINGS[i].label}</div>
       <div class="s">${STATUS_LABEL[s]}</div>
-    </a>`).join("");
+      <div class="docs">
+        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}">📋</a>
+        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}">📝</a>
+      </div>
+    </div>`).join("");
 
   return `
   <details class="card" data-name="${d.nome.toLowerCase()}">
