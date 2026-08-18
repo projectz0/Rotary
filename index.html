@@ -204,14 +204,15 @@
   .meet.dash .s{ color: var(--text-muted); }
   .meet .docs{ display:flex; flex-direction:column; gap:4px; margin-top:6px; }
   .meet .docs a{
-    display:flex; align-items:center; justify-content:center; gap:3px;
-    padding:3px 2px; border-radius:6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+    padding:4px 2px; border-radius:6px;
     background: var(--surface-card); border:1px solid var(--border);
-    font-size:8.5px; font-weight:700; color: var(--text-secondary);
-    text-decoration:none; line-height:1; white-space:nowrap;
+    font-size:7.5px; font-weight:700; color: var(--text-secondary);
+    text-decoration:none; line-height:1.15; text-align:center;
     transition: filter .12s ease, transform .12s ease;
   }
-  .meet .docs a .ico{ font-size:10px; }
+  .meet .docs a .ico{ font-size:12px; }
+  .meet .docs a .lbl{ white-space:normal; }
   .meet .docs a:hover, .meet .docs a:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
 
   .obs{
@@ -412,8 +413,8 @@ function renderCard(d, idx){
       <div class="d">${MEETINGS[i].label}</div>
       <div class="s">${STATUS_LABEL[s]}</div>
       <div class="docs">
-        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}"><span class="ico">📋</span><span class="lbl">Lista</span></a>
-        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}"><span class="ico">📝</span><span class="lbl">Ata</span></a>
+        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}"><span class="ico">📋</span><span class="lbl">Lista de Presença</span></a>
+        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}"><span class="ico">📝</span><span class="lbl">Ata da Reunião</span></a>
       </div>
     </div>`).join("");
 
