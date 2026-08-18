@@ -202,18 +202,25 @@
   .meet.a{ background: var(--critical-bg); }
   .meet.a .s{ color: var(--critical); }
   .meet.dash .s{ color: var(--text-muted); }
-  .meet .docs{ display:flex; flex-direction:column; gap:4px; margin-top:6px; }
-  .meet .docs a{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-    padding:4px 2px; border-radius:6px;
-    background: var(--surface-card); border:1px solid var(--border);
-    font-size:7.5px; font-weight:700; color: var(--text-secondary);
-    text-decoration:none; line-height:1.15; text-align:center;
-    transition: filter .12s ease, transform .12s ease;
+  .docs-card{ margin: 0 16px 14px; }
+  .docs-ico{
+    width:26px; height:26px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; background: var(--muted-bg);
   }
-  .meet .docs a .ico{ font-size:12px; }
-  .meet .docs a .lbl{ white-space:normal; }
-  .meet .docs a:hover, .meet .docs a:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
+  .doclist{ display:flex; flex-direction:column; gap:10px; }
+  .docrow{ background: var(--muted-bg); border-radius:10px; padding:10px 12px; }
+  .docrow-date{ font-size:12px; font-weight:700; color: var(--text-secondary); margin-bottom:8px; }
+  .docrow-links{ display:flex; gap:8px; }
+  .docrow-links a{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:9px 6px; border-radius:8px;
+    background: var(--surface-card); border:1px solid var(--border);
+    font-size:12px; font-weight:600; color: var(--text-secondary);
+    text-decoration:none; transition: filter .12s ease, transform .12s ease;
+  }
+  .docrow-links a .ico{ font-size:14px; }
+  .docrow-links a:hover, .docrow-links a:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
 
   .obs{
     margin-top:10px; font-size:11.5px; color:#a3441c; background:#eb683418;
@@ -277,6 +284,20 @@
     <span><span class="dot" style="background:var(--critical)"></span>Falta</span>
   </div>
 
+  <details class="card docs-card">
+    <summary>
+      <div class="row-top">
+        <div class="docs-ico">📁</div>
+        <div class="name-block">
+          <div class="name">Atas e Listas de Presença</div>
+          <div class="meta">Documentos oficiais de cada reunião</div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </summary>
+    <div class="detail" id="docsList"></div>
+  </details>
+
   <div class="section-title-row">
     <div class="section-title" style="margin:0;" id="rankingTitle">Ranking</div>
     <div class="expand-controls">
@@ -291,7 +312,7 @@
     <div>1 ponto por presença ou falta justificada &middot; falta sem justificativa não pontua &middot; ranking = soma de pontos no período.</div>
     <div class="legend-def">(*) sócio dispensado de frequência (idade + tempo de Rotary ≥ 85 anos), pontua pela mesma regra.</div>
     <div class="legend-def">Atualizado em 28/07/2026 &middot; próxima atualização após a reunião seguinte.</div>
-    <div class="legend-def">Dentro do card expandido de cada sócio: 📋 abre a lista de presença assinada daquele dia &middot; 📝 abre a ata oficial da reunião.</div>
+    <div class="legend-def">Abra "Atas e Listas de Presença" (acima do ranking) para ver os documentos assinados de cada reunião.</div>
   </footer>
 
 </div>
@@ -407,15 +428,25 @@ document.getElementById("statLideresLabel").textContent = lideres.length === 1
 const STATUS_LABEL = {P:"Presente", AJ:"Justificada", A:"Falta", "-":"—"};
 const STATUS_CLASS = {P:"p", AJ:"aj", A:"a", "-":"dash"};
 
+// aba "Atas e Listas de Presença" — os documentos são por reunião (não por sócio),
+// então ficam listados uma única vez aqui, em vez de repetidos em cada card.
+document.getElementById("docsList").innerHTML = `
+  <div class="doclist">
+    ${MEETINGS.map(m => `
+      <div class="docrow">
+        <div class="docrow-date">${m.label}</div>
+        <div class="docrow-links">
+          <a href="${m.lista}" target="_blank" rel="noopener"><span class="ico">📋</span> Lista de Presença</a>
+          <a href="${m.ata}" target="_blank" rel="noopener"><span class="ico">📝</span> Ata da Reunião</a>
+        </div>
+      </div>`).join("")}
+  </div>`;
+
 function renderCard(d, idx){
   const meets = d.status.map((s,i) => `
     <div class="meet ${STATUS_CLASS[s]}">
       <div class="d">${MEETINGS[i].label}</div>
       <div class="s">${STATUS_LABEL[s]}</div>
-      <div class="docs">
-        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}"><span class="ico">📋</span><span class="lbl">Lista de Presença</span></a>
-        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}"><span class="ico">📝</span><span class="lbl">Ata da Reunião</span></a>
-      </div>
     </div>`).join("");
 
   return `

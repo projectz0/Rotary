@@ -78,7 +78,7 @@ Rotary/
 └── Rotary_Frequencia_Mestre.xlsx       → planilha mestre (histórico completo + fórmulas)
 ```
 
-Cada reunião tem **dois documentos-fonte distintos**, guardados com o mesmo nome de arquivo em pastas separadas: a lista de presença (usada para apurar P/AJ/A) e a ata oficial da reunião (registro do que foi discutido). No site, dentro do card expandido de cada sócio, os dois ficam disponíveis lado a lado por data (ícone 📋 abre a lista, 📝 abre a ata) — a pessoa escolhe qual quer ver.
+Cada reunião tem **dois documentos-fonte distintos**, guardados com o mesmo nome de arquivo em pastas separadas: a lista de presença (usada para apurar P/AJ/A) e a ata oficial da reunião (registro do que foi discutido). No site, os dois ficam disponíveis numa aba própria "Atas e Listas de Presença" (acima do ranking, expande igual a um card de sócio) — uma linha por data, com os dois documentos lado a lado. Isso evita repetir os mesmos links em todos os 50 cards de sócio quando "Expandir tudo" é usado; o card de cada sócio mostra só o status visual (presente/falta/justificada) por data.
 
 > Pasta antiga `atas/` (usada até 17/08/2026) ficou obsoleta e foi substituída por `documentos/lista-presenca/` — os arquivos antigos continuam no repositório GitHub por enquanto (não removidos), mas o site não os referencia mais.
 
@@ -96,7 +96,8 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
 - Título do ranking é dinâmico ("Ranking · até julho/2026") — calculado a partir do mês da última reunião no array `MEETINGS`. Quando agosto e os meses seguintes forem adicionados, o título se atualiza sozinho, sem precisar editar texto manualmente.
 - Busca por nome, ignora acentuação (buscar "jose" encontra "José").
 - Botões "Expandir tudo" / "Recolher tudo".
-- Cada card de sócio, ao expandir, mostra o histórico por data. Cada data tem 2 ícones: 📋 abre a lista de presença assinada daquele dia, 📝 abre a ata oficial da reunião — ambos em nova aba.
+- Cada card de sócio, ao expandir, mostra só o status visual por data (Presente/Justificada/Falta) — sem links de documento, pra não poluir quando "Expandir tudo" é usado.
+- Aba "Atas e Listas de Presença" (acima do ranking, mesmo estilo expansível dos cards): uma linha por data de reunião, com os botões "📋 Lista de Presença" e "📝 Ata da Reunião" lado a lado, cada um abrindo o PDF em nova aba.
 - Dados dos sócios ficam embutidos no próprio HTML (array `MEMBERS` no `<script>`), sem backend — é um site 100% estático.
 - Paleta de cores segue a skill de dataviz interna (cores validadas para acessibilidade / daltonismo).
 
@@ -130,3 +131,5 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
 - Avisos de "assinatura fraca/marca pequena" (usados só como conferência interna durante a leitura) foram removidos do site e da planilha depois de validados com o Jefferson — não aparecem mais pro público.
 - 17/08/2026: Eliana Mattos de Amorim Bueno (falta justificada, doença) — listas de 14/07 e 21/07 substituídas pelas versões corretas enviadas pelo Jefferson; código dela mudou de A (falta) para AJ (falta justificada) nas duas datas na planilha e no site (2 pts → 4 pts, 100% presença).
 - 17/08/2026: adicionadas as 4 atas oficiais das reuniões (documento distinto da lista de presença) — site passou a mostrar os dois documentos por data lado a lado, cada um com seu ícone.
+- 18/08/2026: cabeçalho ajustado (Presidente/Secretário em negrito com quebra de linha, tagline do tamanho do título, cores pretas nos nomes) e círculos de posição 1º/2º/3º (dourado/prata/bronze) removidos do ranking, já que empates são comuns e não há critério de desempate — não faz sentido sugerir "pódio".
+- 18/08/2026: os links de documento (Lista de Presença / Ata da Reunião) saíram de dentro de cada card de sócio — como se repetiam nos 50 cards, ficava poluído ao clicar "Expandir tudo". Agora moram numa aba própria "Atas e Listas de Presença", acima do ranking, que expande igual a um card e lista as 4 datas com os dois documentos cada uma. O card de sócio voltou a mostrar só o status visual por data.
