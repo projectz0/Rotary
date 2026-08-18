@@ -166,10 +166,6 @@
     font-size:11.5px; font-weight:700; font-variant-numeric: tabular-nums;
     background: var(--muted-bg); color: var(--text-secondary);
   }
-  .pos.top1{ background:#fab21933; color:#a86a00; }
-  .pos.top2{ background:#c3c2b755; color: var(--text-secondary); }
-  .pos.top3{ background:#eb683433; color:#a3441c; }
-  :root[data-theme="dark"] .pos.top1, .pos.top1 { }
 
   .name-block{ flex:1; min-width:0; }
   .name{ font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -206,14 +202,16 @@
   .meet.a{ background: var(--critical-bg); }
   .meet.a .s{ color: var(--critical); }
   .meet.dash .s{ color: var(--text-muted); }
-  .meet .docs{ display:flex; justify-content:center; gap:5px; margin-top:5px; }
+  .meet .docs{ display:flex; flex-direction:column; gap:4px; margin-top:6px; }
   .meet .docs a{
-    display:flex; align-items:center; justify-content:center;
-    width:21px; height:21px; border-radius:6px; flex:none;
+    display:flex; align-items:center; justify-content:center; gap:3px;
+    padding:3px 2px; border-radius:6px;
     background: var(--surface-card); border:1px solid var(--border);
-    font-size:10.5px; text-decoration:none; line-height:1;
+    font-size:8.5px; font-weight:700; color: var(--text-secondary);
+    text-decoration:none; line-height:1; white-space:nowrap;
     transition: filter .12s ease, transform .12s ease;
   }
+  .meet .docs a .ico{ font-size:10px; }
   .meet .docs a:hover, .meet .docs a:focus-visible{ filter:brightness(0.94); transform: translateY(-1px); }
 
   .obs{
@@ -409,14 +407,13 @@ const STATUS_LABEL = {P:"Presente", AJ:"Justificada", A:"Falta", "-":"—"};
 const STATUS_CLASS = {P:"p", AJ:"aj", A:"a", "-":"dash"};
 
 function renderCard(d, idx){
-  const posClass = idx === 0 ? "top1" : idx === 1 ? "top2" : idx === 2 ? "top3" : "";
   const meets = d.status.map((s,i) => `
     <div class="meet ${STATUS_CLASS[s]}">
       <div class="d">${MEETINGS[i].label}</div>
       <div class="s">${STATUS_LABEL[s]}</div>
       <div class="docs">
-        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}">📋</a>
-        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}">📝</a>
+        <a href="${MEETINGS[i].lista}" target="_blank" rel="noopener" title="Lista de presença de ${MEETINGS[i].label}"><span class="ico">📋</span><span class="lbl">Lista</span></a>
+        <a href="${MEETINGS[i].ata}" target="_blank" rel="noopener" title="Ata da reunião de ${MEETINGS[i].label}"><span class="ico">📝</span><span class="lbl">Ata</span></a>
       </div>
     </div>`).join("");
 
@@ -424,7 +421,7 @@ function renderCard(d, idx){
   <details class="card" data-name="${d.nome.toLowerCase()}">
     <summary>
       <div class="row-top">
-        <div class="pos ${posClass}">${idx+1}</div>
+        <div class="pos">${idx+1}</div>
         <div class="name-block">
           <div class="name">${d.nome}${d.disp ? '<span class="flag">DISP.</span>' : ''}</div>
           <div class="meta">${d.pontos} pts &middot; ${d.pct}% presença &middot; ${d.faltas} falta${d.faltas===1?'':'s'}</div>
