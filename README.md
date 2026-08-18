@@ -2,7 +2,7 @@
 
 Documentação de referência do projeto. Ano Rotário 2026/27. Objetivo: controlar a presença dos sócios nas reuniões semanais (terças-feiras) para apurar, ao fim do ano, quem será bonificado por assiduidade.
 
-- **Site publicado:** https://projectz0.github.io/Rotary/
+- **Site publicado:** https://frequenciarotaryfsa.com.br/ (domínio próprio, ativo desde 18/08/2026; link antigo https://projectz0.github.io/Rotary/ continua funcionando como backup)
 - **Repositório GitHub:** https://github.com/projectz0/Rotary (owner `projectz0`, público)
 - **Pasta de trabalho local:** `C:\CONTROLADORIA\Claude - Projetos\Rotary`
 
@@ -10,7 +10,7 @@ Documentação de referência do projeto. Ano Rotário 2026/27. Objetivo: contro
 
 ## 1. Diretoria (exibida no cabeçalho do site)
 
-- **Presidente:** Bruno Nunes Silva
+- **Presidente:** Bruno de Nunes Silva
 - **1º Secretário:** José Carlos Rodrigues
 
 ---
@@ -133,3 +133,6 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
 - 17/08/2026: adicionadas as 4 atas oficiais das reuniões (documento distinto da lista de presença) — site passou a mostrar os dois documentos por data lado a lado, cada um com seu ícone.
 - 18/08/2026: cabeçalho ajustado (Presidente/Secretário em negrito com quebra de linha, tagline do tamanho do título, cores pretas nos nomes) e círculos de posição 1º/2º/3º (dourado/prata/bronze) removidos do ranking, já que empates são comuns e não há critério de desempate — não faz sentido sugerir "pódio".
 - 18/08/2026: os links de documento (Lista de Presença / Ata da Reunião) saíram de dentro de cada card de sócio — como se repetiam nos 50 cards, ficava poluído ao clicar "Expandir tudo". Agora moram numa aba própria "Atas e Listas de Presença", acima do ranking, que expande igual a um card e lista as 4 datas com os dois documentos cada uma. O card de sócio voltou a mostrar só o status visual por data.
+- 18/08/2026: domínio próprio `frequenciarotaryfsa.com.br` configurado (comprado pelo Jefferson no Registro.br). DNS: 4 registros A apontando pro GitHub Pages (185.199.108/109/110/111.153) + CNAME `www` → `projectz0.github.io.`, cadastrados no painel do Registro.br. GitHub Pages: domínio customizado ativado em Settings → Pages, "DNS check successful" e "Enforce HTTPS" habilitado. Propagação levou algumas horas (normal para domínio recém-registrado) — durante a espera, o domínio customizado precisou ser removido e reconfigurado uma vez no GitHub, porque configurá-lo antes do DNS propagar fazia o GitHub redirecionar até o link antigo (`projectz0.github.io/Rotary/`) para o domínio novo, quebrando os dois links ao mesmo tempo. Site testado e confirmado funcionando no domínio próprio.
+- 18/08/2026: nome do Presidente corrigido de "Bruno Nunes Silva" para "Bruno de Nunes Silva" (grafia correta) — atualizado no cabeçalho do site, no card dele no ranking e neste README.
+- 18/08/2026: Ruy Sandes Leal Junior corrigido de falta (A) para presente (P) em 28/07 — confirmado pelo Jefferson que ele esteve na última reunião (a 07/07 dele já estava correta como presente).
