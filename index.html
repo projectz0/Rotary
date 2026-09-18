@@ -228,6 +228,30 @@
     font-size:12px; font-weight:600; color: var(--text-secondary); opacity:.65;
   }
 
+  .month-group{
+    background: var(--surface-card); border:1px solid var(--border);
+    border-radius:12px; padding:2px 0;
+  }
+  .month-group + .month-group{ margin-top:10px; }
+  .month-group summary{
+    list-style:none; cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    padding:11px 12px;
+  }
+  .month-group summary::-webkit-details-marker{ display:none; }
+  .month-ico{ font-size:15px; flex:none; }
+  .month-name{
+    font-size:13px; font-weight:700; text-transform:capitalize;
+    color: var(--text-primary); flex:1;
+  }
+  .month-count{ font-size:11px; color: var(--text-muted); }
+  .month-group .chevron{ transition: transform .15s ease; color: var(--text-muted); }
+  .month-group[open] .chevron{ transform: rotate(180deg); }
+  .month-body{
+    display:flex; flex-direction:column; gap:8px;
+    padding: 0 10px 10px;
+  }
+
   .obs{
     margin-top:10px; font-size:11.5px; color:#a3441c; background:#eb683418;
     border-radius:8px; padding:7px 9px; line-height:1.4;
@@ -440,18 +464,39 @@ const STATUS_CLASS = {P:"p", AJ:"aj", A:"a", "-":"dash"};
 
 // aba "Atas e Listas de Presença" — os documentos são por reunião (não por sócio),
 // então ficam listados uma única vez aqui, em vez de repetidos em cada card.
+// Agrupados por mês (pasta expansível) pra ficar organizado conforme os meses forem
+// se acumulando ao longo do ano rotário.
+const monthGroups = [];
+MEETINGS.forEach(m => {
+  const mm = parseInt(m.label.split("/")[1], 10);
+  let group = monthGroups.find(g => g.month === mm);
+  if (!group) { group = { month: mm, meetings: [] }; monthGroups.push(group); }
+  group.meetings.push(m);
+});
+
 document.getElementById("docsList").innerHTML = `
   <div class="doclist">
-    ${MEETINGS.map(m => `
-      <div class="docrow">
-        <div class="docrow-date">${m.label}</div>
-        <div class="docrow-links">
-          <a href="${m.lista}" target="_blank" rel="noopener"><span class="ico">📋</span> Lista de Presença</a>
-          ${m.ata
-            ? `<a href="${m.ata}" target="_blank" rel="noopener"><span class="ico">📝</span> Ata da Reunião</a>`
-            : `<span class="pending"><span class="ico">📝</span> Ata pendente</span>`}
+    ${monthGroups.map((g, gi) => `
+      <details class="month-group" ${gi === monthGroups.length - 1 ? "open" : ""}>
+        <summary>
+          <span class="month-ico">📁</span>
+          <span class="month-name">${MONTH_NAMES[g.month]}</span>
+          <span class="month-count">${g.meetings.length} reuni${g.meetings.length === 1 ? "ão" : "ões"}</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="month-body">
+          ${g.meetings.map(m => `
+            <div class="docrow">
+              <div class="docrow-date">${m.label}</div>
+              <div class="docrow-links">
+                <a href="${m.lista}" target="_blank" rel="noopener"><span class="ico">📋</span> Lista de Presença</a>
+                ${m.ata
+                  ? `<a href="${m.ata}" target="_blank" rel="noopener"><span class="ico">📝</span> Ata da Reunião</a>`
+                  : `<span class="pending"><span class="ico">📝</span> Ata pendente</span>`}
+              </div>
+            </div>`).join("")}
         </div>
-      </div>`).join("")}
+      </details>`).join("")}
   </div>`;
 
 function renderCard(d, idx){
