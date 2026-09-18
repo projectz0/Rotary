@@ -27,16 +27,19 @@ O ranking é a soma de pontos no período. Sócios marcados com **(\*)** são "d
 
 ---
 
-## 3. Como ler cada ata (lista de frequência)
+## 3. Como ler cada lista de frequência
 
-Cada ata tem: nome do sócio, coluna de assinatura e coluna "Falta Justificada? ( ) Sim ( ) Não".
+**Mudança de processo a partir de agosto/2026 (decisão do Jefferson, 18/09/2026):** cada reunião agora gera **duas versões** da lista de frequência:
 
-Processo obrigatório ao ler uma ata nova:
+- **Lista "Checada"** (ex.: `Lista de frequência 04-08 - Checada.pdf`) — a pessoa que coleta as assinaturas pinta com **marca-texto amarelo** o nome de quem esteve presente, exatamente para tirar a ambiguidade das assinaturas pequenas/grandes/sobrepostas. **Essa é a lista que o Claude usa para ler presença/falta.** Fica arquivada só internamente, em `conferencia-interna/lista-presenca-checada/` — **nunca é publicada no site nem sobe pro GitHub**.
+- **Lista pública** (ex.: `Lista de frequência 04-08.pdf`, sem marca-texto) — cópia limpa, é a que fica disponível no site em `documentos/lista-presenca/`.
+
+Processo obrigatório ao ler uma lista Checada nova:
 
 1. Listar **todas** as linhas da lista (não pular nenhuma, mesmo as óbvias) — presente, ausente justificado, ausente.
-2. Presença = tem assinatura própria naquela linha. Atenção: letra grande de um sócio pode "vazar" visualmente para a linha vizinha — sempre desconfiar de blocos de assinatura muito próximos/sobrepostos (aconteceu nas linhas 34-38 em mais de uma lista).
-3. Para toda linha sem assinatura, checar explicitamente a coluna Falta Justificada **antes** de marcar como ausente simples. Um "Sim" marcado ali vira ausência justificada (pontua), não falta.
-4. Reportar o resultado completo pro Jefferson conferir com a lista física antes de consolidar na planilha mestre.
+2. **Presença = nome pintado com marca-texto.** Não usar mais a assinatura como critério de leitura — só o marca-texto conta (decisão tomada depois de mais de um erro de leitura por assinatura/marca-texto sobrepostos nas primeiras tentativas de agosto).
+3. Coluna "Falta Justificada? ( ) Sim ( ) Não" é **sempre soberana** sobre o marca-texto: se "Sim" estiver marcado, o código é AJ mesmo que o nome esteja pintado como presente (aconteceu em mais de um caso em agosto — o "Sim" reflete que a pessoa avisou falta justificada, mesmo que quem pintou tenha pintado por engano).
+4. Reportar o resultado completo pro Jefferson conferir com a lista física, **data por data** (não mandar as 4-5 datas do mês de uma vez), antes de consolidar na planilha mestre. Toda correção do Jefferson é a fonte da verdade — a leitura do Claude é só um rascunho a ser validado.
 
 ---
 
@@ -64,23 +67,24 @@ Rotary/
 ├── index.html                          → site (dashboard de ranking)
 ├── assets/
 │   └── rotary-wheel.png                → logo do Rotary (recortada de imagem enviada pelo Jefferson, fundo transparente)
-├── documentos/
-│   ├── lista-presenca/                 → lista de frequência assinada (sign-in) de cada reunião
-│   │   ├── 2026-07-07.pdf
-│   │   ├── 2026-07-14.pdf
-│   │   ├── 2026-07-21.pdf
-│   │   └── 2026-07-28.pdf
+├── documentos/                         → só o que é público / sobe pro site
+│   ├── lista-presenca/                 → lista de frequência limpa (sem marca-texto) de cada reunião
+│   │   ├── 2026-07-07.pdf ... 2026-07-28.pdf
+│   │   └── 2026-08-04.pdf ... 2026-08-25.pdf
 │   └── ata-reuniao/                    → ata oficial (registro/minuta) de cada reunião
-│       ├── 2026-07-07.pdf
-│       ├── 2026-07-14.pdf
-│       ├── 2026-07-21.pdf
-│       └── 2026-07-28.pdf
+│       ├── 2026-07-07.pdf ... 2026-07-28.pdf
+│       └── 2026-08-04.pdf, 2026-08-18.pdf, 2026-08-25.pdf   (11/08 pendente, ver seção 8)
+├── conferencia-interna/
+│   └── lista-presenca-checada/         → listas COM marca-texto, uso interno do Claude só pra ler presença.
+│                                          NUNCA sobe pro GitHub/site (ver seção 3).
 └── Rotary_Frequencia_Mestre.xlsx       → planilha mestre (histórico completo + fórmulas)
 ```
 
-Cada reunião tem **dois documentos-fonte distintos**, guardados com o mesmo nome de arquivo em pastas separadas: a lista de presença (usada para apurar P/AJ/A) e a ata oficial da reunião (registro do que foi discutido). No site, os dois ficam disponíveis numa aba própria "Atas e Listas de Presença" (acima do ranking, expande igual a um card de sócio) — uma linha por data, com os dois documentos lado a lado. Isso evita repetir os mesmos links em todos os 50 cards de sócio quando "Expandir tudo" é usado; o card de cada sócio mostra só o status visual (presente/falta/justificada) por data.
+Estrutura **flat** (sem subpasta por mês) — decisão confirmada com o Jefferson em 18/09/2026 ("Opção A"): todo mês novo, os PDFs entram direto em `documentos/lista-presenca/` e `documentos/ata-reuniao/` no padrão `AAAA-MM-DD.pdf`, sem criar pasta `Agosto - 26/` etc. Isso mantém o mesmo padrão que já estava valendo pro site desde julho.
 
-> Pasta antiga `atas/` (usada até 17/08/2026) ficou obsoleta e foi substituída por `documentos/lista-presenca/` — os arquivos antigos continuam no repositório GitHub por enquanto (não removidos), mas o site não os referencia mais.
+Cada reunião tem **dois documentos-fonte públicos**, guardados com o mesmo nome de arquivo em pastas separadas: a lista de presença (a versão limpa, sem marca-texto — usada só pra visualização, não pra apurar presença) e a ata oficial da reunião (registro do que foi discutido). No site, os dois ficam disponíveis numa aba própria "Atas e Listas de Presença" (acima do ranking, expande igual a um card de sócio) — uma linha por data, com os dois documentos lado a lado. Isso evita repetir os mesmos links em todos os 50 cards de sócio quando "Expandir tudo" é usado; o card de cada sócio mostra só o status visual (presente/falta/justificada) por data.
+
+> Pasta antiga `atas/` (usada até 17/08/2026) e os PDFs duplicados soltos na raiz do projeto (cópias antigas de antes da correção do nome do Presidente/Ruy Sandes) foram apagados em 18/09/2026, depois de confirmar que o site não referenciava nenhum deles (só lê de `documentos/lista-presenca/` e `documentos/ata-reuniao/`). A foto `WhatsApp Image 2026-08-14 at 13.07.09.jpeg` foi mantida a pedido do Jefferson.
 
 A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria um arquivo novo por mês. A cada mês novo, adicionam-se colunas de data novas nela (aba "Frequência"), preservando o histórico e o total de pontos acumulado. A aba "Legenda" documenta os códigos (P / AJ / A / -) e as decisões já tomadas com o Jefferson.
 
@@ -110,15 +114,16 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
 
 ## 7. Fluxo de atualização mensal
 
-1. Jefferson envia as 4-5 atas do mês (fotos/scans em PDF).
-2. Claude lê cada uma, lista todas as linhas (ver seção 3) e reporta pro Jefferson conferir.
-3. Jefferson corrige o que estiver errado (principalmente assinaturas sobrepostas).
+1. Jefferson coloca na pasta de agosto/mês corrente: a ata oficial + **as duas versões** da lista de frequência (Checada com marca-texto, e a limpa/pública) de cada reunião do mês.
+2. Claude lê **uma data por vez**, a partir da lista Checada (ver seção 3 — marca-texto manda, "Falta Justificada: Sim" sempre sobrepõe o marca-texto), e reporta pro Jefferson conferir antes de passar pra próxima data.
+3. Jefferson corrige o que estiver errado. Só depois de **todas** as datas do mês confirmadas, Claude consolida.
 4. Claude atualiza:
-   - `Rotary_Frequencia_Mestre.xlsx`: novas colunas de data na aba Frequência.
-   - `index.html`: novas entradas no array `MEETINGS` (label + caminho do PDF) e novos códigos no array `MEMBERS`.
-   - Renomeia os PDFs recebidos para o padrão `AAAA-MM-DD.pdf` e coloca em `atas/`.
+   - `Rotary_Frequencia_Mestre.xlsx`: novas colunas de data na aba Frequência (`build_roster.py` recriado/reexecutado com os novos códigos, depois validado com `recalc.py` — zero erros de fórmula).
+   - `index.html`: novas entradas no array `MEETINGS` (label + caminho do PDF de lista pública + ata) e novos códigos no array `MEMBERS`, um por sócio.
+   - Move os PDFs recebidos pro padrão flat `AAAA-MM-DD.pdf` em `documentos/lista-presenca/` (versão pública, sem marca-texto) e `documentos/ata-reuniao/`; a versão Checada de cada data vai pra `conferencia-interna/lista-presenca-checada/` e **nunca** é enviada ao GitHub.
+   - `README.md`: registra a data de fechamento do mês na seção 8.
 5. Claude salva tudo na pasta local do Jefferson (`C:\CONTROLADORIA\Claude - Projetos\Rotary`) via ponte com o computador.
-6. Claude sobe as mudanças direto no GitHub, usando o navegador do Jefferson já autenticado (sem precisar de token nem senha) — envia os arquivos pela tela de upload do repositório e confirma o commit.
+6. Claude sobe as mudanças direto no GitHub, usando o navegador do Jefferson já autenticado (sem precisar de token nem senha) — envia os arquivos pela tela de upload do repositório e confirma o commit. **Nunca envia arquivos da pasta `conferencia-interna/`.**
 7. GitHub Pages faz o redeploy automático (leva 1-2 minutos). Claude confere o link ao vivo antes de avisar que terminou.
 
 ---
@@ -136,3 +141,9 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
 - 18/08/2026: domínio próprio `frequenciarotaryfsa.com.br` configurado (comprado pelo Jefferson no Registro.br). DNS: 4 registros A apontando pro GitHub Pages (185.199.108/109/110/111.153) + CNAME `www` → `projectz0.github.io.`, cadastrados no painel do Registro.br. GitHub Pages: domínio customizado ativado em Settings → Pages, "DNS check successful" e "Enforce HTTPS" habilitado. Propagação levou algumas horas (normal para domínio recém-registrado) — durante a espera, o domínio customizado precisou ser removido e reconfigurado uma vez no GitHub, porque configurá-lo antes do DNS propagar fazia o GitHub redirecionar até o link antigo (`projectz0.github.io/Rotary/`) para o domínio novo, quebrando os dois links ao mesmo tempo. Site testado e confirmado funcionando no domínio próprio.
 - 18/08/2026: nome do Presidente corrigido de "Bruno Nunes Silva" para "Bruno de Nunes Silva" (grafia correta) — atualizado no cabeçalho do site, no card dele no ranking e neste README.
 - 18/08/2026: Ruy Sandes Leal Junior corrigido de falta (A) para presente (P) em 28/07 — confirmado pelo Jefferson que ele esteve na última reunião (a 07/07 dele já estava correta como presente).
+- 18/09/2026: **Importação de agosto (04/08, 11/08, 18/08, 25/08) fechada.** Pontos principais:
+  - Limpeza de arquivos: apagados 8 PDFs duplicados soltos na raiz e a pasta `atas/` obsoleta inteira (16 arquivos no total), depois de confirmar via GitHub que o site não referenciava nenhum deles. Pastas `Julho - 26/` dentro de `documentos/` foram achatadas (removida a subpasta, arquivos foram pro nível de `documentos/lista-presenca/` e `documentos/ata-reuniao/` direto) para manter o padrão flat que já valia desde julho — confirmado com o Jefferson como "Opção A".
+  - **Novo processo de leitura com marca-texto** instituído a partir de agosto (detalhado na seção 3): a pessoa que coleta assinaturas agora pinta o nome de quem esteve presente na lista "Checada", que fica só de uso interno em `conferencia-interna/lista-presenca-checada/` — nunca sobe pro site. A lista pública (sem marca-texto) é a que fica em `documentos/lista-presenca/`.
+  - A leitura de agosto passou por 3 rodadas de correção do Jefferson (erros do Claude leram marca-texto errado em Alpiniano Reis Oliveira Filho em 04/08, em Jolival Alves Soares e José Rosa Figueiredo Filho em 18/08, e o caso de Paulo Barreto dos Santos em 18/08 onde o marca-texto estava errado por engano de quem pintou) — todas as 4 datas foram fechadas linha a linha com confirmação explícita do Jefferson antes de consolidar na planilha e no site.
+  - Regra confirmada: quando "Falta Justificada: Sim" está marcado, o sócio é AJ (não conta falta, soma ponto) independentemente do marca-texto estar pintado ou não — o "Sim" é sempre soberano.
+  - **Ata da reunião de 11/08 ainda pendente** — Jefferson está aguardando o envio por terceiros. A lista de presença de 11/08 já está disponível e o ranking já conta essa data normalmente; só o botão da ata no site mostra "Ata pendente" até o arquivo chegar. Quando chegar: salvar como `documentos/ata-reuniao/2026-08-11.pdf` e trocar `ata: null` por `ata: "documentos/ata-reuniao/2026-08-11.pdf"` na entrada de 11/08 do array `MEETINGS` em `index.html`.
