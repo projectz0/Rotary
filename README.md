@@ -73,7 +73,7 @@ Rotary/
 │   │   └── 2026-08-04.pdf ... 2026-08-25.pdf
 │   └── ata-reuniao/                    → ata oficial (registro/minuta) de cada reunião
 │       ├── 2026-07-07.pdf ... 2026-07-28.pdf
-│       └── 2026-08-04.pdf, 2026-08-18.pdf, 2026-08-25.pdf   (11/08 pendente, ver seção 8)
+│       └── 2026-08-04.pdf ... 2026-08-25.pdf   (todas as 4 datas recebidas)
 ├── conferencia-interna/
 │   └── lista-presenca-checada/         → listas COM marca-texto, uso interno do Claude só pra ler presença.
 │                                          NUNCA sobe pro GitHub/site (ver seção 3).
@@ -146,4 +146,4 @@ A planilha mestre é o **arquivo único e cumulativo do ano** — não se cria u
   - **Novo processo de leitura com marca-texto** instituído a partir de agosto (detalhado na seção 3): a pessoa que coleta assinaturas agora pinta o nome de quem esteve presente na lista "Checada", que fica só de uso interno em `conferencia-interna/lista-presenca-checada/` — nunca sobe pro site. A lista pública (sem marca-texto) é a que fica em `documentos/lista-presenca/`.
   - A leitura de agosto passou por 3 rodadas de correção do Jefferson (erros do Claude leram marca-texto errado em Alpiniano Reis Oliveira Filho em 04/08, em Jolival Alves Soares e José Rosa Figueiredo Filho em 18/08, e o caso de Paulo Barreto dos Santos em 18/08 onde o marca-texto estava errado por engano de quem pintou) — todas as 4 datas foram fechadas linha a linha com confirmação explícita do Jefferson antes de consolidar na planilha e no site.
   - Regra confirmada: quando "Falta Justificada: Sim" está marcado, o sócio é AJ (não conta falta, soma ponto) independentemente do marca-texto estar pintado ou não — o "Sim" é sempre soberano.
-  - **Ata da reunião de 11/08 ainda pendente** — Jefferson está aguardando o envio por terceiros. A lista de presença de 11/08 já está disponível e o ranking já conta essa data normalmente; só o botão da ata no site mostra "Ata pendente" até o arquivo chegar. Quando chegar: salvar como `documentos/ata-reuniao/2026-08-11.pdf` e trocar `ata: null` por `ata: "documentos/ata-reuniao/2026-08-11.pdf"` na entrada de 11/08 do array `MEETINGS` em `index.html`.
+  - Ata da reunião de 11/08 estava pendente (aguardando terceiros) e foi recebida e publicada em 18/09/2026 — as 4 atas de agosto estão completas no site.
